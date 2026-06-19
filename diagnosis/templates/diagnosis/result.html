@@ -1,0 +1,45 @@
+{% extends 'diagnosis/base.html' %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<div class="card p-4 mb-4">
+  <div class="text-center mb-4">
+    <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
+    <h3>Diagnosis Result</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card bg-light p-3 mb-3">
+        <h6 class="text-muted">Predicted Disease</h6>
+        <h4 class="text-danger fw-bold">{{ diagnosis.predicted_disease }}</h4>
+      </div>
+      <div class="card bg-light p-3 mb-3">
+        <h6 class="text-muted">Confidence Score</h6>
+        <div class="progress mb-1" style="height:20px">
+          <div class="progress-bar bg-{% if diagnosis.confidence > 70 %}danger{% elif diagnosis.confidence > 40 %}warning{% else %}success{% endif %}"
+               style="width:{{ diagnosis.confidence }}%">{{ diagnosis.confidence }}%</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card bg-light p-3 mb-3">
+        <h6 class="text-muted">Recommendation</h6>
+        <p class="mb-0">{{ diagnosis.recommendation }}</p>
+      </div>
+      <div class="card bg-light p-3">
+        <h6 class="text-muted">Symptoms Entered</h6>
+        {% for s in diagnosis.symptoms_list %}
+          <span class="badge bg-secondary me-1 mb-1">{{ s|title }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <a href="{% url 'download_report' diagnosis.pk %}" class="btn btn-success me-2"><i class="fas fa-download me-1"></i>Download PDF Report</a>
+    <a href="{% url 'symptom_input' %}" class="btn btn-outline-primary me-2">New Diagnosis</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Dashboard</a>
+  </div>
+</div>
+<div class="alert alert-warning">
+  ⚠️ <strong>Disclaimer:</strong> This is an AI-generated preliminary assessment. It does not replace professional medical advice. Please consult a qualified physician.
+</div>
+{% endblock %}
